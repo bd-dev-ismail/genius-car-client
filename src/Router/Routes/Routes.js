@@ -1,8 +1,16 @@
-const { createBrowserHistory } = require("@remix-run/router");
+import { createBrowserRouter } from "react-router-dom";
+import Main from "../../Layout/Main";
+import Home from "../../Pages/Home/Home/Home";
 
-const router = createBrowserHistory([
+
+
+const router = createBrowserRouter([
     {
-        path: '/',
+        path: '/', element: <Main></Main>, children: [
+            {
+                path: '/', element: <Home></Home>
+            }
+        ]
     }
 ])
 
