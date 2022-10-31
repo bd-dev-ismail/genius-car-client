@@ -1,10 +1,12 @@
 import React, { useContext } from 'react';
 import { Helmet } from 'react-helmet';
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { toast } from 'react-toastify';
 import image from "../../assets/images/login/login.svg";
 import { AuthContext } from '../../Context/AuthProvider/AuthProvider';
 const SignUp = () => {
-    const {createUser} = useContext(AuthContext);
+    const { createUser, loginWithGoogle } = useContext(AuthContext);
+    const navigate = useNavigate();
       const handalSignup = (e) => {
         e.preventDefault();
         const form = e.target;
@@ -17,15 +19,26 @@ const SignUp = () => {
             const user = result.user;
             console.log(user);
             form.reset();
+            navigate('/')
+            toast.success('Successfully Create acccount!')
         })
         .catch(error => console.error(error))
       };
+      const handalGoogle = ()=>{
+        loginWithGoogle()
+        .then(result=>{
+          const user = result.user;
+          console.log(user);
+          navigate('/');
+          toast.success('SignUp With Google!')
+        })
+        .catch(error=> toast.error(error.message))
+      }
     return (
-      
       <div className="hero w-full my-20">
         <Helmet>
-        <title>Sign Up -Genius Car</title>
-      </Helmet>
+          <title>Sign Up -Genius Car</title>
+        </Helmet>
         <div className="hero-content grid md:grid-cols-2 gap-20 flex-col lg:flex-row">
           <div className="text-center lg:text-left">
             <img src={image} alt="" className="w-3/4" />
@@ -38,7 +51,7 @@ const SignUp = () => {
                   <span className="label-text">Name</span>
                 </label>
                 <input
-                name='name'
+                  name="name"
                   type="text"
                   placeholder="name"
                   className="input input-bordered"
@@ -49,7 +62,7 @@ const SignUp = () => {
                   <span className="label-text">Email</span>
                 </label>
                 <input
-                name='email'
+                  name="email"
                   type="text"
                   placeholder="email"
                   className="input input-bordered"
@@ -60,18 +73,28 @@ const SignUp = () => {
                   <span className="label-text">Password</span>
                 </label>
                 <input
-                name='password'
+                  name="password"
                   type="password"
                   placeholder="password"
                   className="input input-bordered"
                 />
-               
               </div>
               <div className="form-control mt-6">
-                <input type="submit" value="Sign Up" className="btn btn-error mb-3" />
-                <input type="submit" value="Sign Up With Google" className="btn btn-error btn-outline" />
+                <input
+                  type="submit"
+                  value="Sign Up"
+                  className="btn btn-error mb-3"
+                />
               </div>
             </form>
+            <div className="form-control px-8">
+            <input
+                type="submit"
+                onClick={handalGoogle}
+                value="Sign Up With Google"
+                className="btn btn-error btn-outline"
+              />
+            </div>
             <div className="py-4 text-center">
               <p>
                 Already have an account ?{" "}

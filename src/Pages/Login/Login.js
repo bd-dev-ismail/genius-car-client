@@ -1,14 +1,38 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { Helmet } from 'react-helmet';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
 import image from '../../assets/images/login/login.svg';
+import { AuthContext } from '../../Context/AuthProvider/AuthProvider';
 const Login = () => {
+  const { loginUser, loginWithGoogle } = useContext(AuthContext);
+  const navigate = useNavigate();
     const handalLogin = (e) =>{
         e.preventDefault();
         const form = e.target;
         const email = form.email.value;
         const password = form.password.value;
         console.log(email, password);
+        loginUser(email, password)
+        .then(result =>{
+          const user = result.user;
+          console.log(user);
+          form.reset();
+          navigate('/')
+          toast.success('Successfully Login!')
+        })
+        .catch(error=> toast.error(error.message))
+    }
+    const handalGoogle = ()=>{
+      loginWithGoogle()
+      .then(result=>{
+        const user = result.user;
+        console.log(user);
+        navigate('/')
+        toast.success('Login With Google')
+
+      })
+      .catch(error=> toast.error(error))
     }
     return (
       <div className="hero w-full my-20">
@@ -44,20 +68,28 @@ const Login = () => {
                   className="input input-bordered"
                 />
                 <label className="label">
-                  <a href="#" className="label-text-alt link link-hover">
+                  <a href="/" className="label-text-alt link link-hover">
                     Forgot password?
                   </a>
                 </label>
               </div>
               <div className="form-control mt-6">
-                <input type="submit" value="Login" className="btn btn-error mb-3" />
                 <input
                   type="submit"
-                  value="Login With Google"
-                  className="btn btn-error btn-outline"
+                  value="Login"
+                  className="btn btn-error mb-3"
                 />
+             
               </div>
             </form>
+            <div className="form-control px-8">
+              <input
+                type="submit"
+                onClick={handalGoogle}
+                value="Login With Google"
+                className="btn btn-error btn-outline"
+              />
+            </div>
             <div className="py-4 text-center">
               <p>
                 New in Genius Car ?{" "}
