@@ -1,11 +1,20 @@
 import React from 'react';
+import { Helmet } from 'react-helmet';
+import { Link } from 'react-router-dom';
 import image from '../../assets/images/login/login.svg';
 const Login = () => {
     const handalLogin = (e) =>{
         e.preventDefault();
+        const form = e.target;
+        const email = form.email.value;
+        const password = form.password.value;
+        console.log(email, password);
     }
     return (
       <div className="hero w-full my-20">
+        <Helmet>
+          <title>Login -Genius Car</title>
+        </Helmet>
         <div className="hero-content grid md:grid-cols-2 gap-20 flex-col lg:flex-row">
           <div className="text-center lg:text-left">
             <img src={image} alt="" className="w-3/4" />
@@ -18,6 +27,7 @@ const Login = () => {
                   <span className="label-text">Email</span>
                 </label>
                 <input
+                  name="email"
                   type="text"
                   placeholder="email"
                   className="input input-bordered"
@@ -28,6 +38,7 @@ const Login = () => {
                   <span className="label-text">Password</span>
                 </label>
                 <input
+                  name="password"
                   type="text"
                   placeholder="password"
                   className="input input-bordered"
@@ -39,10 +50,22 @@ const Login = () => {
                 </label>
               </div>
               <div className="form-control mt-6">
-                <input type="submit" value="Login" className="btn btn-error" />
-                
+                <input type="submit" value="Login" className="btn btn-error mb-3" />
+                <input
+                  type="submit"
+                  value="Login With Google"
+                  className="btn btn-error btn-outline"
+                />
               </div>
             </form>
+            <div className="py-4 text-center">
+              <p>
+                New in Genius Car ?{" "}
+                <Link className="text-orange-600 font-semibold" to="/signup">
+                  Sign Up
+                </Link>
+              </p>
+            </div>
           </div>
         </div>
       </div>
