@@ -9,14 +9,17 @@ const AuthProvider = ({children}) => {
     const provider = new GoogleAuthProvider();
     //create user
     const createUser = (email, password) =>{
+        setLoading(true)
         return createUserWithEmailAndPassword(auth, email, password);
     }
     //login user
     const loginUser = (email, password) =>{
+        setLoading(true)
         return signInWithEmailAndPassword(auth, email, password);
     }
     //login with google 
     const loginWithGoogle = ()=>{
+        setLoading(true)
         return signInWithPopup(auth,provider);
     }
     //observer

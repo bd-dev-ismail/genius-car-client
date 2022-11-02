@@ -16,7 +16,8 @@ const ServiceCard = ({service}) => {
               Price ${price}
             </p>
             <Link to={`/checkout/${_id}`}>
-              <button className="btn btn-link cursor-pointer">
+              <button className="btn btn-link text-orange-600  cursor-pointer">
+                Checkout
                 <FaArrowRight className="text-orange-600" />
               </button>
             </Link>
