@@ -26,20 +26,22 @@ const Checkout = () => {
         //     return toast.warning('Phone Number sholud be 10 charaters');
         // }
         fetch("http://localhost:5000/orders", {
-            method: 'POST', 
-            headers: {
-                'content-type': 'application/json',
-            },
-            body: JSON.stringify(order)
+          method: "POST",
+          headers: {
+            "content-type": "application/json",
+            authorization: `Bearer ${localStorage.getItem("genius-token")}`,
+          },
+          body: JSON.stringify(order),
         })
-        .then(res => res.json())
-        .then(data => {
+          .then((res) => res.json())
+          .then((data) => {
             console.log(data);
-            if(data.acknowledged){
-                form.reset();
-                toast.success('Order Placed Successfully')
+            if (data.acknowledged) {
+              form.reset();
+              toast.success("Order Placed Successfully");
             }
-        }).catch(err=> console.log(err))
+          })
+          .catch((err) => console.log(err));
     }
     return (
       <div>

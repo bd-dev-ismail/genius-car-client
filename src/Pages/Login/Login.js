@@ -24,23 +24,24 @@ const Login = () => {
           }
           console.log(currentUser);
           //get jwt
-          fetch('http://localhost:5000/jwt', {
-            method: 'POST',
+          fetch("http://localhost:5000/jwt", {
+            method: "POST",
             headers: {
-              'content-type': 'application/json',
+              "content-type": "application/json",
             },
-            body: JSON.stringify(currentUser)
+            body: JSON.stringify(currentUser),
           })
-          .then(res => res.json())
-          .then(data => {
-            console.log(data);
-            //not best pratices !
-            localStorage.setItem("genius-token", data.token);
-            navigate(from, {replace: true});
-          })
+            .then((res) => res.json())
+            .then((data) => {
+              console.log(data);
+              //not best placce
+              localStorage.setItem('genius-token', data.token);
+              navigate(from, { replace: true });
+              toast.success("Successfully Login!");
+              form.reset();
+            });
           
-          toast.success('Successfully Login!')
-          form.reset();
+          
         })
         .catch(error=> toast.error(error.message))
     }
