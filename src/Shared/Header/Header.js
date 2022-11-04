@@ -1,18 +1,36 @@
 import React, { useContext } from 'react';
 import { Link } from 'react-router-dom';
+import { toast } from 'react-toastify';
 import logo from '../../assets/logo.svg';
 import { AuthContext } from '../../Context/AuthProvider/AuthProvider';
 const Header = () => {
-  const {user} = useContext(AuthContext)
+  const { user, logOut } = useContext(AuthContext);
+  const handalLogOut = ()=>{
+    logOut()
+    .then(()=>{
+      toast.warning('Sccessfully Logout')
+    })
+    .catch(err => toast.error(err.message))
+  }
     const menuItem = (
       <>
-        <li className='font-semibold'>
-          <Link to='/'>Home</Link>
+        <li className="font-semibold">
+          <Link to="/">Home</Link>
         </li>
-        <li className='font-semibold'>
-          <Link to='/login'>Login</Link>
-        </li>
-        
+        {user?.email ? (
+          <>
+            <li className="font-semibold">
+              <Link to="/orders">Orders</Link>
+            </li>
+            <li className="font-semibold">
+              <button onClick={handalLogOut} className="btn-ghost">Logout</button>
+            </li>
+          </>
+        ) : (
+          <li className="font-semibold">
+            <Link to="/login">Login</Link>
+          </li>
+        )}
       </>
     );
     return (

@@ -1,12 +1,14 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect } from 'react';
 import { Helmet } from 'react-helmet';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import image from '../../assets/images/login/login.svg';
 import { AuthContext } from '../../Context/AuthProvider/AuthProvider';
 const Login = () => {
   const { loginUser, loginWithGoogle } = useContext(AuthContext);
   const navigate = useNavigate();
+  const location = useLocation();
+  const from = location.state?.from?.pathname || '/';
     const handalLogin = (e) =>{
         e.preventDefault();
         const form = e.target;
@@ -17,9 +19,28 @@ const Login = () => {
         .then(result =>{
           const user = result.user;
           console.log(user);
-          form.reset();
-          navigate('/')
+          const currentUser = {
+            email: user.email,
+          }
+          console.log(currentUser);
+          //get jwt
+          fetch('http://localhost:5000/jwt', {
+            method: 'POST',
+            headers: {
+              'content-type': 'application/json',
+            },
+            body: JSON.stringify(currentUser)
+          })
+          .then(res => res.json())
+          .then(data => {
+            console.log(data);
+            //not best pratices !
+            localStorage.setItem("genius-token", data.token);
+            navigate(from, {replace: true});
+          })
+          
           toast.success('Successfully Login!')
+          form.reset();
         })
         .catch(error=> toast.error(error.message))
     }
@@ -28,12 +49,15 @@ const Login = () => {
       .then(result=>{
         const user = result.user;
         console.log(user);
-        navigate('/')
+        navigate(from,{replace: true})
         toast.success('Login With Google')
 
       })
       .catch(error=> toast.error(error))
-    }
+    };
+    useEffect(()=>{
+      window.scrollTo(0,0);
+    },[])
     return (
       <div className="hero w-full my-20">
         <Helmet>
@@ -63,7 +87,7 @@ const Login = () => {
                 </label>
                 <input
                   name="password"
-                  type="text"
+                  type="password"
                   placeholder="password"
                   className="input input-bordered"
                 />
