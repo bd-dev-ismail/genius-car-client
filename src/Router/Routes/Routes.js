@@ -34,7 +34,7 @@ const router = createBrowserRouter([
           </PrivateRoute>
         ),
         loader: ({ params }) =>
-          fetch(`http://localhost:5000/services/${params.id}`),
+          fetch(`https://genius-car-server-gamma.vercel.app/services/${params.id}`),
       },
       {
         path: "/orders",

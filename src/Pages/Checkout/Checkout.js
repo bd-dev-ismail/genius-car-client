@@ -25,7 +25,7 @@ const Checkout = () => {
         // if(phone.length > 10){
         //     return toast.warning('Phone Number sholud be 10 charaters');
         // }
-        fetch("http://localhost:5000/orders", {
+        fetch("https://genius-car-server-gamma.vercel.app/orders", {
           method: "POST",
           headers: {
             "content-type": "application/json",

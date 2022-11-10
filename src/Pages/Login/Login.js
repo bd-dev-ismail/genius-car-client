@@ -2,6 +2,7 @@ import React, { useContext, useEffect } from 'react';
 import { Helmet } from 'react-helmet';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
+import { setAuthToken } from '../../api/Auth';
 import image from '../../assets/images/login/login.svg';
 import { AuthContext } from '../../Context/AuthProvider/AuthProvider';
 const Login = () => {
@@ -18,43 +19,24 @@ const Login = () => {
         loginUser(email, password)
         .then(result =>{
           const user = result.user;
-          console.log(user);
-          const currentUser = {
-            email: user.email,
-          }
-          console.log(currentUser);
-          //get jwt
-          fetch("http://localhost:5000/jwt", {
-            method: "POST",
-            headers: {
-              "content-type": "application/json",
-            },
-            body: JSON.stringify(currentUser),
-          })
-            .then((res) => res.json())
-            .then((data) => {
-              console.log(data);
-              //not best placce
-              localStorage.setItem('genius-token', data.token);
-              navigate(from, { replace: true });
-              toast.success("Successfully Login!");
-              form.reset();
-            });
+          setAuthToken(user);
+          navigate(from, { replace: true });
+          toast.success("Successfully Login!");
           
           
         })
         .catch(error=> toast.error(error.message))
     }
-    const handalGoogle = ()=>{
+    const handalGoogle = () => {
       loginWithGoogle()
-      .then(result=>{
-        const user = result.user;
-        console.log(user);
-        navigate(from,{replace: true})
-        toast.success('Login With Google')
-
-      })
-      .catch(error=> toast.error(error))
+        .then((result) => {
+          const user = result.user;
+          //jwt
+          setAuthToken(user);
+          navigate("/");
+          toast.success("SignUp With Google!");
+        })
+        .catch((error) => toast.error(error.message));
     };
     useEffect(()=>{
       window.scrollTo(0,0);

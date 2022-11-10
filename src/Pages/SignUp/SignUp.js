@@ -2,6 +2,7 @@ import React, { useContext } from 'react';
 import { Helmet } from 'react-helmet';
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from 'react-toastify';
+import { setAuthToken } from '../../api/Auth';
 import image from "../../assets/images/login/login.svg";
 import { AuthContext } from '../../Context/AuthProvider/AuthProvider';
 const SignUp = () => {
@@ -18,6 +19,7 @@ const SignUp = () => {
         .then(result =>{
             const user = result.user;
             console.log(user);
+            setAuthToken(user);
             form.reset();
             navigate('/')
             toast.success('Successfully Create acccount!')
@@ -28,7 +30,8 @@ const SignUp = () => {
         loginWithGoogle()
         .then(result=>{
           const user = result.user;
-          console.log(user);
+          //jwt
+          setAuthToken(user);
           navigate('/');
           toast.success('SignUp With Google!')
         })
