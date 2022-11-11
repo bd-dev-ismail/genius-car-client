@@ -1,16 +1,20 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import ServiceCard from './ServiceCard';
 
 const Services = () => {
     const [services, setServices] = useState([]);
     const [isAsc, setIsAsc] = useState(true);
+    const searchRef = useRef();
+   const [search, setSearch] = useState('');
     useEffect(()=>{
-        fetch(`http://localhost:5000/services?order=${isAsc ? 'asc' : 'desc'}`)
+        fetch(`http://localhost:5000/services?search=${search}&order=${isAsc ? 'asc' : 'desc'}`)
           .then((res) => res.json())
           .then((data) => setServices(data));
-    },[isAsc])
+    },[isAsc, search])
     // console.log(services);
-   
+   const handalSearch = ()=>{
+    setSearch(searchRef.current.value);
+   }
     return (
       <div>
         <div className="text-center mb-4">
@@ -22,15 +26,26 @@ const Services = () => {
             believable.{" "}
           </p>
         </div>
-        <div className="flex items-center">
-          <p className="font-semibold mr-3">Click to change Price Range: </p>
-          <button className='btn btn-sm btn-secondary' onClick={() => setIsAsc(!isAsc)}>
-            {isAsc ? "Low To Hight" : "High To Low"}
-          </button> 
-          {/* <select name="" id="">
-            <option onSelect={()=> setIsAsc(isAsc)} value="true">Low To High</option>
-            <option onSelect={()=> setIsAsc(!isAsc)} value="false">Hight To Low</option>
-          </select> */}
+
+        <div className="flex items-center justify-between ">
+          <div className="flex items-center">
+            <p className="font-semibold mr-3">Click to change Price Range: </p>
+            <button
+              className="btn btn-sm btn-secondary"
+              onClick={() => setIsAsc(!isAsc)}
+            >
+              {isAsc ? "Low To Hight" : "High To Low"}
+            </button>
+          </div>
+          <div>
+            <label className="font-semibold mr-3">Search By Service Name</label>
+            <input
+              ref={searchRef}
+              type="text"
+              className="input input-bordered"
+            />{" "}
+            <button onClick={handalSearch} className="btn btn-warning ">Search</button>
+          </div>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 my-10 ">
           {services.map((service) => (
